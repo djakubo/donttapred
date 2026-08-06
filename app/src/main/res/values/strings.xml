@@ -59,4 +59,10 @@
     <string name="title_computer_opponent">Computer Opponent</string>
     <string name="key_computer_starts">COMPUTER_STARTS</string>
     <string name="title_computer_starts">Computer Starts</string>
+    <string name="score_format">Score: %d</string>
+    <string name="game_over">Game Over</string>
+    <string name="play_again">Play Again</string>
+    <string name="exit">Exit</string>
+    <string name="rules_title">Rules</string>
+    <string name="rules_text">Tap only the black tiles at the bottom!\nAvoid tapping red or empty tiles.\nTiles move faster as you score!</string>
 </resources>
