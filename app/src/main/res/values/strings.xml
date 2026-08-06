@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tic Tac Toe</string>
+    <string name="app_name">Don't Tap Red</string>
     <string name="title_activity_statistics">Statistics</string>
     <string name="fab">FAB</string>
     <string name="information">Information</string>
