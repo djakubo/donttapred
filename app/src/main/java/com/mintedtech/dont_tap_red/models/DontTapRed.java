@@ -63,10 +63,10 @@ public class DontTapRed {
         int col = position % mColumns;
         if (row >= 0 && row < mBlackTilePositions.size()) {
             if (col == mBlackTilePositions.get(row)) {
-                return 1; // Black
+                return 1; // Green (Safe/Target)
             }
         }
-        return 0; // Empty
+        return 0; // Red (Deadly/Background)
     }
 
     public int getScore() {
