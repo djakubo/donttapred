@@ -15,6 +15,5 @@
         android:id="@+id/imageO"
         style="@style/Image_x_o"
         android:contentDescription="@string/current_turn_O"
-        android:src="@drawable/ic_o"
-        app:tint="@color/color_light_red" />
+        android:src="@drawable/tile_red" />
 </com.google.android.material.card.MaterialCardView>

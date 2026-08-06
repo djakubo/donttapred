@@ -19,7 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'com.mintedtech.tic_tac_toe'
+    namespace 'com.mintedtech.dont_tap_red'
 }
 
 dependencies {

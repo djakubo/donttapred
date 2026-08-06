@@ -1,4 +1,4 @@
-package com.mintedtech.tic_tac_toe.activities;
+package com.mintedtech.dont_tap_red.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mintedtech.tic_tac_toe.R;
-import com.mintedtech.tic_tac_toe.enums.PlayerTurn;
-import com.mintedtech.tic_tac_toe.models.TicTacToe;
+import com.mintedtech.dont_tap_red.R;
+import com.mintedtech.dont_tap_red.enums.PlayerTurn;
+import com.mintedtech.dont_tap_red.models.TicTacToe;
 
 import java.util.Locale;
 

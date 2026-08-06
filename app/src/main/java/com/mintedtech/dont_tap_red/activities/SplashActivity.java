@@ -1,10 +1,10 @@
-package com.mintedtech.tic_tac_toe.activities;
+package com.mintedtech.dont_tap_red.activities;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.mintedtech.tic_tac_toe.R;
+import com.mintedtech.dont_tap_red.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;

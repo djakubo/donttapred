@@ -1,4 +1,4 @@
-package com.mintedtech.tic_tac_toe.activities;
+package com.mintedtech.dont_tap_red.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,14 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.mintedtech.tic_tac_toe.R;
-import com.mintedtech.tic_tac_toe.classes.CardViewImageAdapter;
-import com.mintedtech.tic_tac_toe.classes.Utils;
-import com.mintedtech.tic_tac_toe.enums.PlayerTurn;
-import com.mintedtech.tic_tac_toe.enums.WinType;
-import com.mintedtech.tic_tac_toe.enums.WinTypeDiagonal;
-import com.mintedtech.tic_tac_toe.interfaces.OnItemClickCustomListener;
-import com.mintedtech.tic_tac_toe.models.TicTacToe;
+import com.mintedtech.dont_tap_red.R;
+import com.mintedtech.dont_tap_red.classes.CardViewImageAdapter;
+import com.mintedtech.dont_tap_red.classes.Utils;
+import com.mintedtech.dont_tap_red.enums.PlayerTurn;
+import com.mintedtech.dont_tap_red.enums.WinType;
+import com.mintedtech.dont_tap_red.enums.WinTypeDiagonal;
+import com.mintedtech.dont_tap_red.interfaces.OnItemClickCustomListener;
+import com.mintedtech.dont_tap_red.models.TicTacToe;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -28,7 +28,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -36,7 +35,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 public class MainActivity extends AppCompatActivity
 {
     // named constants (finals)
-    private final int mEMPTY_SPACE = R.drawable.ic_xo_light,
+    private final int mEMPTY_SPACE = R.drawable.tile_empty,
             mINVALID_ICON_VALUE_FLAG = -99;
 
     private int mOLD_ICON_X, mOLD_ICON_O, mOLD_ICON_XO;
@@ -246,11 +245,11 @@ public class MainActivity extends AppCompatActivity
     private void updateTintOfImagesXO ()
     {
         boolean isCurrentTurnX = mCurrentGame.getCurrentPlayer () == PlayerTurn.X;
-        int colorForLetterX = isCurrentTurnX ? R.color.color_yes : R.color.color_no;
-        int colorForLetterO = isCurrentTurnX ? R.color.color_no : R.color.color_yes;
+        float alphaX = isCurrentTurnX ? 1.0f : 0.3f;
+        float alphaO = isCurrentTurnX ? 0.3f : 1.0f;
 
-        mImageX.setColorFilter (ContextCompat.getColor (this, colorForLetterX));
-        mImageO.setColorFilter (ContextCompat.getColor (this, colorForLetterO));
+        mImageX.setAlpha (alphaX);
+        mImageO.setAlpha (alphaO);
     }
 
     /**
@@ -350,9 +349,11 @@ public class MainActivity extends AppCompatActivity
     {
         // The XO must be element #0 because the default pref value is empty space
         // So #0 will always match if the app is being run for the first time
-        final int[] OLD_ICONS = new int[] {mOLD_ICON_XO, mOLD_ICON_X, mOLD_ICON_O,};
+        final int[] OLD_ICONS = new int[] {mOLD_ICON_XO, mOLD_ICON_X, mOLD_ICON_O, 
+                R.drawable.ic_xo_light, R.drawable.ic_x, R.drawable.ic_o};
         final int[] CURRENT_ICONS =
-                new int[] {R.drawable.ic_xo_light, R.drawable.ic_x, R.drawable.ic_o};
+                new int[] {R.drawable.tile_empty, R.drawable.tile_green, R.drawable.tile_red,
+                        R.drawable.tile_empty, R.drawable.tile_green, R.drawable.tile_red};
 
         int validIcon = mINVALID_ICON_VALUE_FLAG;
 
@@ -361,7 +362,7 @@ public class MainActivity extends AppCompatActivity
                         ? CURRENT_ICONS[i] : validIcon;
         }
 
-        return validIcon != mINVALID_ICON_VALUE_FLAG ? validIcon : R.drawable.ic_xo_light;
+        return validIcon != mINVALID_ICON_VALUE_FLAG ? validIcon : R.drawable.tile_empty;
     }
 
 
@@ -618,9 +619,9 @@ public class MainActivity extends AppCompatActivity
      */
     private void saveBoardIcons (SharedPreferences.Editor editor)
     {
-        editor.putLong (mKEY_ICON_X, R.drawable.ic_x);
-        editor.putLong (mKEY_ICON_O, R.drawable.ic_o);
-        editor.putLong (mKEY_ICON_XO, R.drawable.ic_xo_light);
+        editor.putLong (mKEY_ICON_X, R.drawable.tile_green);
+        editor.putLong (mKEY_ICON_O, R.drawable.tile_red);
+        editor.putLong (mKEY_ICON_XO, R.drawable.tile_empty);
     }
 
 
@@ -875,11 +876,11 @@ public class MainActivity extends AppCompatActivity
 
     private int getIconForPriorPlayer ()
     {
-        // Reference to X or O, depending on value of mTurnX (which player's turn it is)
+        // Reference to Green or Red, depending on value of mTurnX (which player's turn it is)
         PlayerTurn currentPlayer = mCurrentGame.isGameOver () ?
                                    mCurrentGame.getCurrentPlayer () :
                                    mCurrentGame.getPriorPlayer ();
-        return currentPlayer == PlayerTurn.X ? R.drawable.ic_x : R.drawable.ic_o;
+        return currentPlayer == PlayerTurn.X ? R.drawable.tile_green : R.drawable.tile_red;
     }
 
 

@@ -1,4 +1,4 @@
-package com.mintedtech.tic_tac_toe.classes;
+package com.mintedtech.dont_tap_red.classes;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.mintedtech.tic_tac_toe.R;
-import com.mintedtech.tic_tac_toe.interfaces.OnItemClickCustomListener;
+import com.mintedtech.dont_tap_red.R;
+import com.mintedtech.dont_tap_red.interfaces.OnItemClickCustomListener;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

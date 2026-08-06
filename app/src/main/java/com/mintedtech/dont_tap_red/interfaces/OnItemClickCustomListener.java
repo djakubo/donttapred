@@ -1,4 +1,4 @@
-package com.mintedtech.tic_tac_toe.interfaces;
+package com.mintedtech.dont_tap_red.interfaces;
 
 import android.view.View;
 

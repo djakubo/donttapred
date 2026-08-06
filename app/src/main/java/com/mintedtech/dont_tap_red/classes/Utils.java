@@ -1,9 +1,9 @@
-package com.mintedtech.tic_tac_toe.classes;
+package com.mintedtech.dont_tap_red.classes;
 
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.mintedtech.tic_tac_toe.R;
+import com.mintedtech.dont_tap_red.R;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;

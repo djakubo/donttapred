@@ -1,9 +1,9 @@
-package com.mintedtech.tic_tac_toe.classes;
+package com.mintedtech.dont_tap_red.classes;
 
 import android.view.View;
 import android.widget.ImageView;
 
-import com.mintedtech.tic_tac_toe.R;
+import com.mintedtech.dont_tap_red.R;
 
 import androidx.recyclerview.widget.RecyclerView;
 

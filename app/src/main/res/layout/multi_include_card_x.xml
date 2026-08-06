@@ -15,7 +15,6 @@
         android:id="@+id/imageX"
         style="@style/Image_x_o"
         android:contentDescription="@string/current_turn_X"
-        android:src="@drawable/ic_x"
-        app:tint="@color/color_dark_green" />
+        android:src="@drawable/tile_green" />
 
 </com.google.android.material.card.MaterialCardView>
