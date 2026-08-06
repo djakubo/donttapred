@@ -1,4 +1,4 @@
-package com.mintedtech.tic_tac_toe.enums;
+package com.mintedtech.dont_tap_red.enums;
 
 public enum WinTypeDiagonal
 {

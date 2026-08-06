@@ -1,9 +1,9 @@
-package com.mintedtech.tic_tac_toe.models;
+package com.mintedtech.dont_tap_red.models;
 
 import com.google.gson.Gson;
-import com.mintedtech.tic_tac_toe.enums.PlayerTurn;
-import com.mintedtech.tic_tac_toe.enums.WinType;
-import com.mintedtech.tic_tac_toe.enums.WinTypeDiagonal;
+import com.mintedtech.dont_tap_red.enums.PlayerTurn;
+import com.mintedtech.dont_tap_red.enums.WinType;
+import com.mintedtech.dont_tap_red.enums.WinTypeDiagonal;
 
 import java.util.Arrays;
 
