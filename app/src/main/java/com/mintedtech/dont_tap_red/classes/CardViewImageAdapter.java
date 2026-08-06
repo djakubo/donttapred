@@ -67,10 +67,10 @@ public class CardViewImageAdapter extends RecyclerView.Adapter<CardImageViewHold
     }
 
     /**
-     * Custom method used to replace a board space's image with X or O
+     * Custom method used to replace a board space's image with a tile color
      *
-     * @param position      Element number of array in which to change from blank to X or O
-     * @param newDrawableID ID returned from R.Drawable.ic_x or .ic_O
+     * @param position      Element number of array in which to change from blank to color
+     * @param newDrawableID ID returned from R.drawable.tile_green or .tile_red
      */
     public void setImage (int position, int newDrawableID)
     {

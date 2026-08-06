@@ -19,5 +19,5 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/information"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_xo_light" />
+        app:srcCompat="@drawable/tile_empty" />
 </com.google.android.material.card.MaterialCardView>
