@@ -15,6 +15,6 @@
         android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/board_space"
         android:scaleType="fitCenter"
-        android:src="@drawable/tile_empty"
-        tools:src="@drawable/tile_empty" />
+        android:src="@drawable/tile_red"
+        tools:src="@drawable/tile_red" />
 </com.google.android.material.circularreveal.cardview.CircularRevealCardView>

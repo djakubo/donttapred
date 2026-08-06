@@ -19,5 +19,5 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/information"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/tile_empty" />
+        app:srcCompat="@drawable/tile_red" />
 </com.google.android.material.card.MaterialCardView>
