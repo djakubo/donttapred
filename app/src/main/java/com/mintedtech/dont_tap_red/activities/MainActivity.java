@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGame() {
+        // 4 columns as per rules, 4 rows visible
         mGame = new DontTapRed(4, 4);
         mAdapter = new CardViewImageAdapter(mGame);
         
@@ -65,17 +65,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setupGameLoop();
+        startNewGame();
     }
 
-    private void setupGameLoop() {
+    private void startNewGame() {
+        mGame.startGame();
+        mCurrentDelay = 1000;
+        updateUI();
+        
+        if (mGameLoop != null) {
+            mHandler.removeCallbacks(mGameLoop);
+        }
+        
         mGameLoop = new Runnable() {
             @Override
             public void run() {
                 if (!mGame.isGameOver()) {
-                    mGame.shiftTiles();
+                    // shiftTiles returns false if a target was missed (slid off screen)
+                    boolean continued = mGame.shiftTiles();
                     updateUI();
-                    mHandler.postDelayed(this, mCurrentDelay);
+                    
+                    if (continued) {
+                        mHandler.postDelayed(this, mCurrentDelay);
+                    } else {
+                        handleGameOver();
+                    }
                 } else {
                     handleGameOver();
                 }
@@ -92,19 +106,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void adjustSpeed() {
-        mCurrentDelay = Math.max(200, 1000 - (mGame.getScore() * 10L));
+        // Increase speed (decrease delay) based on score
+        mCurrentDelay = Math.max(300, 1000 - (mGame.getScore() * 15L));
     }
 
     private void handleGameOver() {
         mHandler.removeCallbacks(mGameLoop);
+        
+        // Show game over dialog
         new AlertDialog.Builder(this)
                 .setTitle(R.string.game_over)
                 .setMessage(getString(R.string.score_format, mGame.getScore()))
                 .setPositiveButton(R.string.play_again, (dialog, which) -> {
-                    mGame.startGame();
-                    mCurrentDelay = 1000;
-                    updateUI();
-                    mHandler.postDelayed(mGameLoop, mCurrentDelay);
+                    startNewGame();
                 })
                 .setNegativeButton(R.string.exit, (dialog, which) -> finish())
                 .setCancelable(false)
@@ -129,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mGame != null && !mGame.isGameOver() && mGameLoop != null) {
+            mHandler.removeCallbacks(mGameLoop); // Avoid duplicates
             mHandler.postDelayed(mGameLoop, mCurrentDelay);
         }
     }
@@ -143,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            // Settings logic if any
+            return true;
+        } else if (id == R.id.action_newGame) {
+            startNewGame();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -62,15 +62,10 @@
     <color name="md_theme_dark_outlineVariant">#43474E</color>
     <color name="md_theme_dark_scrim">#000000</color>
 
-
-    <!-- The following three colors are overridden in res/values-night/... -->
-    <!-- Almost white background (i.e. secondary; to complement default white background) -->
     <color name="backgroundDefaultColor">@color/cardview_light_background</color>
 
-    <color name="tile_green">#4CAF50</color>
-    <color name="tile_red">#F44336</color>
-    <color name="tile_green">#4CAF50</color>
-    <color name="tile_red">#F44336</color>
-    <color name="tile_empty">#E0E0E0</color>
-    <color name="tile_black">#000000</color>
+    <color name="tile_target">#000000</color>
+    <color name="tile_red">#FF0000</color>
+    <color name="tile_empty">#FFFFFF</color>
+    <color name="tile_cleared">#D3D3D3</color>
 </resources>

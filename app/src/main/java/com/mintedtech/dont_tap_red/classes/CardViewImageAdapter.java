@@ -60,10 +60,19 @@ public class CardViewImageAdapter extends RecyclerView.Adapter<CardImageViewHold
         ImageView currentImageView = holder.mCurrentImageView;
         int tileType = mGame.getTileType(position);
         
-        if (tileType == 1) {
-            currentImageView.setImageResource(R.drawable.tile_green);
-        } else {
-            currentImageView.setImageResource(R.drawable.tile_red);
+        switch (tileType) {
+            case DontTapRed.TILE_TARGET:
+                currentImageView.setImageResource(R.drawable.tile_black);
+                break;
+            case DontTapRed.TILE_RED:
+                currentImageView.setImageResource(R.drawable.tile_red);
+                break;
+            case DontTapRed.TILE_CLEARED:
+                currentImageView.setImageResource(R.drawable.tile_cleared);
+                break;
+            default:
+                currentImageView.setImageResource(R.drawable.tile_empty);
+                break;
         }
     }
 
