@@ -2,28 +2,23 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_board"
     style="@style/Widget.Material3.CardView.Filled"
     app:strokeColor="?attr/colorOutlineVariant"
     app:strokeWidth="@dimen/outside_half_margin"
     app:cardCornerRadius="@dimen/double_margin"
-    android:layout_margin="@dimen/default_margin"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:showIn="@layout/content_main">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/main_include_all_items">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_board"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
         android:overScrollMode="never"
-        tools:itemCount="9"
+        tools:itemCount="16"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/rv_card_image_item"
-        tools:spanCount="3"
-         />
+        tools:spanCount="4" />
+
 </com.google.android.material.card.MaterialCardView>

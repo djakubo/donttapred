@@ -50,7 +50,17 @@ public class MainActivity extends AppCompatActivity {
         mGame = new DontTapRed(4, 4);
         mAdapter = new CardViewImageAdapter(mGame);
         
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        // Custom GridLayoutManager to perfectly size tiles
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 4) {
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                // Force each item height to be 1/4 of the RecyclerView height
+                lp.height = getHeight() / 4;
+                return true;
+            }
+        };
+        
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
         
         mAdapter.setOnItemClickListener((position, v) -> {
@@ -65,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 updateUI();
                 adjustSpeed();
             } else if (mGame.isGameOver()) {
-                // Only trigger Game Over if the model actually set the game over state.
-                // Tapping an already-cleared row will return success=false but NOT game over.
                 handleGameOver();
             }
         });
