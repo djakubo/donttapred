@@ -32,6 +32,7 @@ public class DontTapRed {
         mGameOver = false;
         mTargetColumns.clear();
         mRowCleared.clear();
+        // Initialize with rows. The first row (index 0) is top, last row (index mRows-1) is bottom.
         for (int i = 0; i < mRows; i++) {
             mTargetColumns.add(mRandom.nextInt(mColumns));
             mRowCleared.add(false);
@@ -48,8 +49,7 @@ public class DontTapRed {
         int row = position / mColumns;
         int col = position % mColumns;
 
-        // Rule: Only tap the bottom-most active target tile first.
-        // We find the index of the bottom-most row that is NOT cleared.
+        // Find the index of the bottom-most row that is NOT cleared.
         int bottomMostActiveRow = -1;
         for (int i = mRows - 1; i >= 0; i--) {
             if (!mRowCleared.get(i)) {
@@ -58,18 +58,12 @@ public class DontTapRed {
             }
         }
 
-        // If user tapped a row other than the bottom-most active one, we ignore or penalize.
-        // Sequential gameplay enforcement:
+        // Rule enforcement: Only allow tapping the bottom-most target.
         if (row != bottomMostActiveRow) {
-            // Optional: User said "Ensure players can only tap... first".
-            // Let's treat tapping a higher row as a miss/game over if it's a target, 
-            // OR just ignore it. Piano Tiles usually ignores it or treats as miss.
-            // Let's treat it as Game Over for simplicity and strictness if it's a target or red.
-            // Actually, let's just ignore taps on already cleared rows or rows too far up.
-            if (row > bottomMostActiveRow) return false; // Already cleared
+            // Ignore taps on rows already cleared
+            if (row > bottomMostActiveRow) return false;
             
-            // If they tap a target that is NOT the bottom-most one:
-            // "Ensure players can only tap the bottom-most active target tile first"
+            // Tapping a row higher than the current target results in Game Over
             mGameOver = true;
             return false;
         }
@@ -80,7 +74,7 @@ public class DontTapRed {
             mScore++;
             return true;
         } else {
-            // Tapped a RED tile (since 1 target, 3 red per row)
+            // Tapped a RED tile (or just not the target)
             mGameOver = true;
             return false;
         }
@@ -93,20 +87,19 @@ public class DontTapRed {
     public boolean shiftTiles() {
         if (mGameOver) return false;
 
-        // Check if the bottom row target was cleared.
-        // "The game ends immediately if you... let a non-red tile slide off the screen without tapping it."
+        // If the bottom row was not cleared before shifting, it's a miss -> Game Over.
         if (!mRowCleared.get(mRows - 1)) {
             mGameOver = true;
             return false;
         }
 
-        // Move all tiles down
+        // Move all tiles down (from bottom to top)
         for (int i = mRows - 1; i > 0; i--) {
             mTargetColumns.set(i, mTargetColumns.get(i - 1));
             mRowCleared.set(i, mRowCleared.get(i - 1));
         }
 
-        // New row at top
+        // Add a fresh new row at the top
         mTargetColumns.set(0, mRandom.nextInt(mColumns));
         mRowCleared.set(0, false);
 
@@ -117,12 +110,10 @@ public class DontTapRed {
         int row = position / mColumns;
         int col = position % mColumns;
         
-        if (mRowCleared.get(row) && col == mTargetColumns.get(row)) {
-            return TILE_CLEARED;
-        }
-        
+        if (row < 0 || row >= mRows) return TILE_EMPTY;
+
         if (col == mTargetColumns.get(row)) {
-            return TILE_TARGET;
+            return mRowCleared.get(row) ? TILE_CLEARED : TILE_TARGET;
         } else {
             return TILE_RED;
         }
