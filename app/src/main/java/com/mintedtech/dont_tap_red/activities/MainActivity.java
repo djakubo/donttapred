@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private Runnable mGameLoop;
     private long mCurrentDelay = 1000;
+    private boolean mGameStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGame() {
-        // 4 columns as per rules, 4 rows visible
         mGame = new DontTapRed(4, 4);
         mAdapter = new CardViewImageAdapter(mGame);
         
@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
             
             boolean success = mGame.attemptTurn(position);
             if (success) {
+                if (!mGameStarted) {
+                    mGameStarted = true;
+                    startGameLoop();
+                }
                 updateUI();
                 adjustSpeed();
             } else {
@@ -65,23 +69,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        startNewGame();
+        prepareNewGame();
     }
 
-    private void startNewGame() {
+    private void prepareNewGame() {
         mGame.startGame();
+        mGameStarted = false;
         mCurrentDelay = 1000;
-        updateUI();
-        
         if (mGameLoop != null) {
             mHandler.removeCallbacks(mGameLoop);
         }
-        
+        updateUI();
+    }
+
+    private void startGameLoop() {
         mGameLoop = new Runnable() {
             @Override
             public void run() {
                 if (!mGame.isGameOver()) {
-                    // shiftTiles returns false if a target was missed (slid off screen)
                     boolean continued = mGame.shiftTiles();
                     updateUI();
                     
@@ -106,19 +111,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void adjustSpeed() {
-        // Increase speed (decrease delay) based on score
         mCurrentDelay = Math.max(300, 1000 - (mGame.getScore() * 15L));
     }
 
     private void handleGameOver() {
         mHandler.removeCallbacks(mGameLoop);
+        mGameStarted = false;
         
-        // Show game over dialog
         new AlertDialog.Builder(this)
                 .setTitle(R.string.game_over)
                 .setMessage(getString(R.string.score_format, mGame.getScore()))
                 .setPositiveButton(R.string.play_again, (dialog, which) -> {
-                    startNewGame();
+                    prepareNewGame();
                 })
                 .setNegativeButton(R.string.exit, (dialog, which) -> finish())
                 .setCancelable(false)
@@ -142,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGame != null && !mGame.isGameOver() && mGameLoop != null) {
-            mHandler.removeCallbacks(mGameLoop); // Avoid duplicates
+        if (mGameStarted && mGame != null && !mGame.isGameOver() && mGameLoop != null) {
+            mHandler.removeCallbacks(mGameLoop);
             mHandler.postDelayed(mGameLoop, mCurrentDelay);
         }
     }
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_newGame) {
-            startNewGame();
+            prepareNewGame();
             return true;
         }
         return super.onOptionsItemSelected(item);
