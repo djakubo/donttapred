@@ -12,8 +12,8 @@ public class DontTapRed {
 
     private final int mColumns;
     private final int mRows;
-    private final List<Integer> mTargetColumns; // Column of the target tile in each row
-    private final List<Boolean> mRowCleared;    // Whether the target in this row has been tapped
+    private final List<Integer> mTargetColumns;
+    private final List<Boolean> mRowCleared;
     private int mScore;
     private boolean mGameOver;
     private final Random mRandom;
@@ -32,24 +32,18 @@ public class DontTapRed {
         mGameOver = false;
         mTargetColumns.clear();
         mRowCleared.clear();
-        // Initialize with rows. The first row (index 0) is top, last row (index mRows-1) is bottom.
         for (int i = 0; i < mRows; i++) {
             mTargetColumns.add(mRandom.nextInt(mColumns));
             mRowCleared.add(false);
         }
     }
 
-    /**
-     * @param position 0-based position in the grid (row * columns + col)
-     * @return true if it was a successful tap on a target
-     */
     public boolean attemptTurn(int position) {
         if (mGameOver) return false;
 
         int row = position / mColumns;
         int col = position % mColumns;
 
-        // Find the index of the bottom-most row that is NOT cleared.
         int bottomMostActiveRow = -1;
         for (int i = mRows - 1; i >= 0; i--) {
             if (!mRowCleared.get(i)) {
@@ -58,48 +52,38 @@ public class DontTapRed {
             }
         }
 
-        // Rule enforcement: Only allow tapping the bottom-most target.
         if (row != bottomMostActiveRow) {
-            // Ignore taps on rows already cleared
-            if (row > bottomMostActiveRow) return false;
-            
-            // Tapping a row higher than the current target results in Game Over
+            if (row > bottomMostActiveRow) return false; // Already cleared
             mGameOver = true;
             return false;
         }
 
         if (col == mTargetColumns.get(row)) {
-            // Success!
             mRowCleared.set(row, true);
             mScore++;
             return true;
         } else {
-            // Tapped a RED tile (or just not the target)
             mGameOver = true;
             return false;
         }
     }
 
-    /**
-     * Shifts tiles down. Called by a timer.
-     * @return false if the game ends because a target was missed
-     */
     public boolean shiftTiles() {
         if (mGameOver) return false;
 
-        // If the bottom row was not cleared before shifting, it's a miss -> Game Over.
+        // If the player hasn't cleared the bottom row, they missed it.
         if (!mRowCleared.get(mRows - 1)) {
             mGameOver = true;
             return false;
         }
 
-        // Move all tiles down (from bottom to top)
+        // Shift everything down
         for (int i = mRows - 1; i > 0; i--) {
             mTargetColumns.set(i, mTargetColumns.get(i - 1));
             mRowCleared.set(i, mRowCleared.get(i - 1));
         }
 
-        // Add a fresh new row at the top
+        // New top row
         mTargetColumns.set(0, mRandom.nextInt(mColumns));
         mRowCleared.set(0, false);
 
