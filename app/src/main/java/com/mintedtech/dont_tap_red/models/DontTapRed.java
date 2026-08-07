@@ -44,25 +44,36 @@ public class DontTapRed {
         int row = position / mColumns;
         int col = position % mColumns;
 
-        int bottomMostActiveRow = -1;
+        // Find the bottom-most row that is not yet cleared
+        int firstActiveRow = -1;
         for (int i = mRows - 1; i >= 0; i--) {
             if (!mRowCleared.get(i)) {
-                bottomMostActiveRow = i;
+                firstActiveRow = i;
                 break;
             }
         }
 
-        if (row != bottomMostActiveRow) {
-            if (row > bottomMostActiveRow) return false; // Already cleared
+        // If no active row is found (all cleared), just wait for shift
+        if (firstActiveRow == -1) return false;
+
+        // If user taps an already cleared row, ignore it
+        if (row > firstActiveRow) {
+            return false;
+        }
+
+        // If user taps a row ABOVE the bottom-most active row, it's out of order -> Game Over
+        if (row < firstActiveRow) {
             mGameOver = true;
             return false;
         }
 
+        // Now row == firstActiveRow. Check if target was hit.
         if (col == mTargetColumns.get(row)) {
             mRowCleared.set(row, true);
             mScore++;
             return true;
         } else {
+            // Tapped a red square in the active row -> Game Over
             mGameOver = true;
             return false;
         }
@@ -71,19 +82,19 @@ public class DontTapRed {
     public boolean shiftTiles() {
         if (mGameOver) return false;
 
-        // If the player hasn't cleared the bottom row, they missed it.
+        // If the bottom-most row is not cleared, it means the player missed it as it slides off
         if (!mRowCleared.get(mRows - 1)) {
             mGameOver = true;
             return false;
         }
 
-        // Shift everything down
+        // Move rows down: Row 2 to Row 3, Row 1 to Row 2, Row 0 to Row 1
         for (int i = mRows - 1; i > 0; i--) {
             mTargetColumns.set(i, mTargetColumns.get(i - 1));
             mRowCleared.set(i, mRowCleared.get(i - 1));
         }
 
-        // New top row
+        // New row at the top (Row 0)
         mTargetColumns.set(0, mRandom.nextInt(mColumns));
         mRowCleared.set(0, false);
 
@@ -99,7 +110,9 @@ public class DontTapRed {
         if (col == mTargetColumns.get(row)) {
             return mRowCleared.get(row) ? TILE_CLEARED : TILE_TARGET;
         } else {
-            return TILE_RED;
+            // In a Piano Tiles game, if the row is already cleared, 
+            // the non-target tiles in that row usually look neutral/empty.
+            return mRowCleared.get(row) ? TILE_EMPTY : TILE_RED;
         }
     }
 

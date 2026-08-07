@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 updateUI();
                 adjustSpeed();
-            } else {
+            } else if (mGame.isGameOver()) {
+                // Only trigger Game Over if the model actually set the game over state.
+                // Tapping an already-cleared row will return success=false but NOT game over.
                 handleGameOver();
             }
         });
