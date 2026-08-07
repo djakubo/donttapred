@@ -65,4 +65,5 @@
     <string name="exit">Exit</string>
     <string name="rules_title">Rules</string>
     <string name="rules_text">Tap only the black tiles at the bottom!\nAvoid tapping red or empty tiles.\nTiles move faster as you score!</string>
+    <string name="action_settings">Settings</string>
 </resources>
