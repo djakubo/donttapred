@@ -16,9 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        tools:itemCount="16"
+        tools:itemCount="9"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/rv_card_image_item"
-        tools:spanCount="4" />
+        tools:spanCount="3" />
 
 </com.google.android.material.card.MaterialCardView>

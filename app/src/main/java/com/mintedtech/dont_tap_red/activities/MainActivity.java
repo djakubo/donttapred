@@ -42,11 +42,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Score is in the bottom bar, Timer will be in the top bar
         mScoreView = findViewById(R.id.tv_status);
-        mTimerView = findViewById(R.id.tv_status_top); // Updated layout will have this ID
+        mTimerView = findViewById(R.id.tv_status_top);
         if (mTimerView == null) {
-            // Fallback if layout hasn't been updated yet
             mTimerView = findViewById(R.id.tv_status); 
         }
 
@@ -58,13 +56,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGame() {
-        mGame = new DontTapRed(4, 4);
+        // Updated to 3x3 grid as requested
+        mGame = new DontTapRed(3, 3);
         mAdapter = new CardViewImageAdapter(mGame);
         
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 4) {
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3) {
             @Override
             public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
-                lp.height = getHeight() / 4;
+                // Force each item height to be 1/3 of the RecyclerView height for 3x3 grid
+                if (getHeight() > 0) {
+                    lp.height = getHeight() / 3;
+                }
                 return true;
             }
         };
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
     private void startRunning() {
         mGameStarted = true;
         
-        // Start scrolling loop
         mGameLoop = new Runnable() {
             @Override
             public void run() {
@@ -119,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         };
         mHandler.postDelayed(mGameLoop, mCurrentDelay);
 
-        // Start countdown timer
         mCountdownRunnable = new Runnable() {
             @Override
             public void run() {
@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void adjustSpeed() {
-        // Difficulty Scaling: Increase speed slightly based on score
         mCurrentDelay = Math.max(250, 1000 - (mGame.getScore() * 10L));
     }
 
@@ -191,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mGameStarted && mGame != null && !mGame.isGameOver()) {
-            // Resume loops if game was already running
             if (mGameLoop != null) mHandler.postDelayed(mGameLoop, mCurrentDelay);
             if (mCountdownRunnable != null) mHandler.postDelayed(mCountdownRunnable, 1000);
         }
