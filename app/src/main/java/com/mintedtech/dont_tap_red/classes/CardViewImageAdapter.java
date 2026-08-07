@@ -35,7 +35,7 @@ public class CardViewImageAdapter extends RecyclerView.Adapter<CardImageViewHold
         int tileType = mGame.getTileType(position);
         
         switch (tileType) {
-            case DontTapRed.TILE_TARGET:
+            case DontTapRed.TILE_SAFE:
                 currentImageView.setImageResource(R.drawable.tile_black);
                 break;
             case DontTapRed.TILE_RED:

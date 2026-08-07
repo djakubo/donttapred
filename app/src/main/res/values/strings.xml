@@ -66,4 +66,6 @@
     <string name="rules_title">Rules</string>
     <string name="rules_text">Tap only the black tiles at the bottom!\nAvoid tapping red or empty tiles.\nTiles move faster as you score!</string>
     <string name="action_settings">Settings</string>
+    <string name="timer_format">Time: %d s</string>
+    <string name="time_up">Time\'s Up!</string>
 </resources>

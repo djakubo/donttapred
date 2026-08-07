@@ -23,11 +23,15 @@ public class MainActivity extends AppCompatActivity {
     private DontTapRed mGame;
     private CardViewImageAdapter mAdapter;
     private TextView mScoreView;
+    private TextView mTimerView;
     private RecyclerView mRecyclerView;
     
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private Runnable mGameLoop;
+    private Runnable mCountdownRunnable;
+    
     private long mCurrentDelay = 1000;
+    private int mSecondsRemaining = 30;
     private boolean mGameStarted = false;
 
     @Override
@@ -38,7 +42,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Score is in the bottom bar, Timer will be in the top bar
         mScoreView = findViewById(R.id.tv_status);
+        mTimerView = findViewById(R.id.tv_status_top); // Updated layout will have this ID
+        if (mTimerView == null) {
+            // Fallback if layout hasn't been updated yet
+            mTimerView = findViewById(R.id.tv_status); 
+        }
+
         mRecyclerView = findViewById(R.id.rv_board);
 
         setupGame();
@@ -50,11 +61,9 @@ public class MainActivity extends AppCompatActivity {
         mGame = new DontTapRed(4, 4);
         mAdapter = new CardViewImageAdapter(mGame);
         
-        // Custom GridLayoutManager to perfectly size tiles
         GridLayoutManager layoutManager = new GridLayoutManager(this, 4) {
             @Override
             public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
-                // Force each item height to be 1/4 of the RecyclerView height
                 lp.height = getHeight() / 4;
                 return true;
             }
@@ -69,13 +78,12 @@ public class MainActivity extends AppCompatActivity {
             boolean success = mGame.attemptTurn(position);
             if (success) {
                 if (!mGameStarted) {
-                    mGameStarted = true;
-                    startGameLoop();
+                    startRunning();
                 }
                 updateUI();
                 adjustSpeed();
             } else if (mGame.isGameOver()) {
-                handleGameOver();
+                handleGameOver(getString(R.string.game_over));
             }
         });
 
@@ -86,31 +94,50 @@ public class MainActivity extends AppCompatActivity {
         mGame.startGame();
         mGameStarted = false;
         mCurrentDelay = 1000;
-        if (mGameLoop != null) {
-            mHandler.removeCallbacks(mGameLoop);
-        }
+        mSecondsRemaining = 30;
+        stopAllRunnables();
         updateUI();
     }
 
-    private void startGameLoop() {
+    private void startRunning() {
+        mGameStarted = true;
+        
+        // Start scrolling loop
         mGameLoop = new Runnable() {
             @Override
             public void run() {
                 if (!mGame.isGameOver()) {
                     boolean continued = mGame.shiftTiles();
                     updateUI();
-                    
                     if (continued) {
                         mHandler.postDelayed(this, mCurrentDelay);
                     } else {
-                        handleGameOver();
+                        handleGameOver(getString(R.string.game_over));
                     }
-                } else {
-                    handleGameOver();
                 }
             }
         };
         mHandler.postDelayed(mGameLoop, mCurrentDelay);
+
+        // Start countdown timer
+        mCountdownRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mSecondsRemaining > 0 && !mGame.isGameOver()) {
+                    mSecondsRemaining--;
+                    updateTimerUI();
+                    mHandler.postDelayed(this, 1000);
+                } else if (mSecondsRemaining <= 0) {
+                    handleGameOver(getString(R.string.time_up));
+                }
+            }
+        };
+        mHandler.postDelayed(mCountdownRunnable, 1000);
+    }
+
+    private void stopAllRunnables() {
+        if (mGameLoop != null) mHandler.removeCallbacks(mGameLoop);
+        if (mCountdownRunnable != null) mHandler.removeCallbacks(mCountdownRunnable);
     }
 
     private void updateUI() {
@@ -118,18 +145,25 @@ public class MainActivity extends AppCompatActivity {
         if (mScoreView != null) {
             mScoreView.setText(getString(R.string.score_format, mGame.getScore()));
         }
+        updateTimerUI();
+    }
+
+    private void updateTimerUI() {
+        if (mTimerView != null) {
+            mTimerView.setText(getString(R.string.timer_format, mSecondsRemaining));
+        }
     }
 
     private void adjustSpeed() {
-        mCurrentDelay = Math.max(300, 1000 - (mGame.getScore() * 15L));
+        // Difficulty Scaling: Increase speed slightly based on score
+        mCurrentDelay = Math.max(250, 1000 - (mGame.getScore() * 10L));
     }
 
-    private void handleGameOver() {
-        mHandler.removeCallbacks(mGameLoop);
-        mGameStarted = false;
+    private void handleGameOver(String title) {
+        stopAllRunnables();
         
         new AlertDialog.Builder(this)
-                .setTitle(R.string.game_over)
+                .setTitle(title)
                 .setMessage(getString(R.string.score_format, mGame.getScore()))
                 .setPositiveButton(R.string.play_again, (dialog, which) -> {
                     prepareNewGame();
@@ -150,15 +184,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mHandler.removeCallbacks(mGameLoop);
+        stopAllRunnables();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGameStarted && mGame != null && !mGame.isGameOver() && mGameLoop != null) {
-            mHandler.removeCallbacks(mGameLoop);
-            mHandler.postDelayed(mGameLoop, mCurrentDelay);
+        if (mGameStarted && mGame != null && !mGame.isGameOver()) {
+            // Resume loops if game was already running
+            if (mGameLoop != null) mHandler.postDelayed(mGameLoop, mCurrentDelay);
+            if (mCountdownRunnable != null) mHandler.postDelayed(mCountdownRunnable, 1000);
         }
     }
 
