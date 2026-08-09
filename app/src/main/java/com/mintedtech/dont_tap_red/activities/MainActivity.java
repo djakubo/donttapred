@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mintedtech.dont_tap_red.R;
@@ -47,10 +46,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGame() {
-        mGame = new DontTapRed(4, 4);
+        mGame = new DontTapRed(3, 3);
         mAdapter = new CardViewImageAdapter(mGame);
         
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         mRecyclerView.setAdapter(mAdapter);
         
         mAdapter.setOnItemClickListener((position, v) -> {
@@ -113,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
     
     private void showRulesDialog() {
         new AlertDialog.Builder(this)
-                .setTitle(R.string.rules_title)
-                .setMessage(R.string.rules_text)
+                .setTitle(R.string.game_rules)
+                .setMessage(R.string.aboutDialogTitle)
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
     }

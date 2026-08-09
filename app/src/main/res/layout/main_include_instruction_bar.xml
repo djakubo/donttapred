@@ -12,7 +12,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@+id/rv_board"
+    app:layout_constraintBottom_toTopOf="@+id/cv_board"
     tools:showIn="@layout/content_main">
 
     <TextView
