@@ -31,28 +31,50 @@ public class CardViewImageAdapter extends RecyclerView.Adapter<CardImageViewHold
                 .inflate(R.layout.rv_card_image_item, parent, false);
 
         CardImageViewHolder cardImageViewHolder = new CardImageViewHolder(itemLayoutView);
-        adjustScaling(cardImageViewHolder, parent.getContext());
+        adjustScaling(cardImageViewHolder, parent);
 
         return cardImageViewHolder;
     }
 
-    private void adjustScaling(CardImageViewHolder cardImageViewHolder, Context context) {
+    private void adjustScaling(CardImageViewHolder cardImageViewHolder, ViewGroup parent) {
         ImageView imageInNewlyInflatedView = cardImageViewHolder.mCurrentImageView;
         ViewGroup.LayoutParams currentLayoutParams = imageInNewlyInflatedView.getLayoutParams();
-        currentLayoutParams.height = calcHeightSize(context);
+        currentLayoutParams.height = calcHeightSize(parent);
         imageInNewlyInflatedView.setLayoutParams(currentLayoutParams);
     }
 
-    private int calcHeightSize(Context context) {
+    private int calcHeightSize(ViewGroup parent) {
+        // Try to get the actual height from the RecyclerView (parent)
+        int parentHeight = parent.getHeight();
+        
+        // If the RecyclerView has been measured, use its height to fit 3 rows exactly
+        if (parentHeight > 0) {
+            Resources resources = parent.getContext().getResources();
+            float density = resources.getDisplayMetrics().density;
+            // Subtract the total vertical margins for the item (4dp top + 4dp bottom = 8dp)
+            int itemMargins = (int) (8 * density);
+            return (parentHeight / 3) - itemMargins;
+        }
+
+        // Fallback to DisplayMetrics if parent height isn't available yet
+        Context context = parent.getContext();
         Resources resources = context.getResources();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        Configuration configuration = resources.getConfiguration();
+        int orientation = resources.getConfiguration().orientation;
 
-        boolean isLandscape = (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE);
-        double scaleVertical = isLandscape ? 4.0 : 4.0; // Show 4 rows
-        double screenHeight = displayMetrics.heightPixels;
+        float density = displayMetrics.density;
+        float barsHeight;
 
-        return (int) (screenHeight / scaleVertical);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Very aggressive estimate to ensure we don't exceed screen height
+            barsHeight = 220 * density;
+        } else {
+            // In portrait, we account for instructions and bars
+            barsHeight = 260 * density;
+        }
+        
+        double availableHeight = displayMetrics.heightPixels - barsHeight;
+        return (int) (availableHeight / 3.0);
     }
 
     @Override

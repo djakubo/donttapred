@@ -9,9 +9,6 @@
     <string name="o">O</string>
     <string name="no_winner">No Winner</string>
 
-    <!-- Error Messages -->
-    <string name="error_space_already_taken">That space is already taken.</string>
-
     <!-- Info Messages -->
     <string name="game_rules">"
         Don't Tap Red is simple to play!\n
@@ -31,7 +28,7 @@
     <string name="about">About</string>
 
     <!-- About Dialog Items -->>
-    <string name="aboutDialogTitle">About Tic Tac Toe</string>
+    <string name="aboutDialogTitle">About Don\'t Tap Red </string>
     <string name="aboutDialog_banner"><![CDATA[© 2015–2024 Samuel A.\nEmail: mintedtech@gmail.com\n\nThanks to Touro University\'s MCON 451/521 students for their in-class thoughts and ideas.]]></string>
     <string name="OK">OK</string>
 
@@ -63,6 +60,5 @@
     <string name="game_over">Game Over</string>
     <string name="play_again">Play Again</string>
     <string name="exit">Exit</string>
-    <string name="rules_title">Rules</string>
-    <string name="rules_text">Tap only the black tiles at the bottom!\nAvoid tapping red or empty tiles.\nTiles move faster as you score!</string>
+
 </resources>

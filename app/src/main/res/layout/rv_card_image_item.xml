@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.circularreveal.cardview.CircularRevealCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -15,6 +14,5 @@
         android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/board_space"
         android:scaleType="fitCenter"
-        android:src="@drawable/tile_red"
-        tools:src="@drawable/tile_red" />
+        android:src="@drawable/tile_red" />
 </com.google.android.material.circularreveal.cardview.CircularRevealCardView>

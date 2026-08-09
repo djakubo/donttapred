@@ -2,28 +2,28 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_board"
     style="@style/Widget.Material3.CardView.Filled"
     app:strokeColor="?attr/colorOutlineVariant"
     app:strokeWidth="@dimen/outside_half_margin"
     app:cardCornerRadius="@dimen/double_margin"
     android:layout_margin="@dimen/default_margin"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="0dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/top_bar"
     tools:showIn="@layout/content_main">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_board"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
         android:overScrollMode="never"
+        android:nestedScrollingEnabled="false"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
         tools:itemCount="9"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:listitem="@layout/rv_card_image_item"
-        tools:spanCount="3"
-         />
+        tools:listitem="@layout/rv_card_image_item" />
 </com.google.android.material.card.MaterialCardView>
