@@ -5,12 +5,6 @@
     tools:context=".activities.MainActivity">
 
     <item
-        android:id="@+id/action_newGame"
-        android:icon="@android:drawable/ic_media_play"
-        android:title="@string/action_newGame"
-        app:showAsAction="ifRoom|withText" />
-
-    <item
         android:id="@+id/action_statistics"
         android:icon="@android:drawable/ic_menu_recent_history"
         android:title="@string/view_statistics"

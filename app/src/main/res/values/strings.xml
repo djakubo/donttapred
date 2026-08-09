@@ -12,7 +12,7 @@
     <!-- Info Messages -->
     <string name="game_rules">"
         Don't Tap Red is simple to play!\n
-        Players tap on the green tiles while avoiding the red tiles as the board refreshes with new tiles.\n
+        Players tap on the green tiles while avoiding the red tiles as the board refreshes with new tiles at a faster pace.\n
         The goal is to keep tapping green tiles and continue playing for as long as possible.\n
         The game ends when a player taps a red tile and gets out."</string>
     <string name="banner_text">Please tap on a square</string>
@@ -24,12 +24,10 @@
     <string name="action_autoSaveGame">Auto-Save Game</string>
     <string name="action_computerOpponent">Computer Opponent</string>
     <string name="action_computerStarts">Computer Goes First</string>
-    <string name="action_newGame">New Game</string>
     <string name="about">About</string>
 
     <!-- About Dialog Items -->>
     <string name="aboutDialogTitle">About Don\'t Tap Red </string>
-    <string name="aboutDialog_banner"><![CDATA[© 2015–2024 Samuel A.\nEmail: mintedtech@gmail.com\n\nThanks to Touro University\'s MCON 451/521 students for their in-class thoughts and ideas.]]></string>
     <string name="OK">OK</string>
 
     <!-- Status Bar Items -->
@@ -57,6 +55,7 @@
     <string name="key_computer_starts">COMPUTER_STARTS</string>
     <string name="title_computer_starts">Computer Starts</string>
     <string name="score_format">Score: %d</string>
+    <string name="timer_format">Time: %d</string>
     <string name="game_over">Game Over</string>
     <string name="play_again">Play Again</string>
     <string name="exit">Exit</string>

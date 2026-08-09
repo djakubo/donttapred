@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:showIn="@layout/main_include_bottom_bar">
 
+    <TextView
+        android:id="@+id/tv_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/outside_half_margin"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.Material3.ActionBar.Title"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Time: 10:00" />
+
     <include layout="@layout/main_include_bottom_bar_status_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
