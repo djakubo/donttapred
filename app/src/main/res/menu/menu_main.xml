@@ -17,28 +17,14 @@
         app:showAsAction="ifRoom|withText" />
 
     <item
-        android:id="@+id/action_autoSave"
-        android:title="@string/action_autoSaveGame"
+        android:id="@+id/action_one_green_tile"
+        android:title="@string/title_one_green_tile"
         android:checkable="true"
         android:checked="false"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_computerOpponent"
-        android:title="@string/action_computerOpponent"
-        android:checkable="true"
-        android:checked="false"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_computerStarts"
-        android:title="@string/action_computerStarts"
-        android:checkable="true"
-        android:checked="false"
-        app:showAsAction="never" />
     <item
         android:id="@+id/action_about"
         android:title="@string/about"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 </menu>

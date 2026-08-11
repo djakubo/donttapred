@@ -16,14 +16,8 @@
         The goal is to keep tapping green tiles and continue playing for as long as possible.\n
         The game ends when a player taps a red tile and gets out."</string>
     <string name="banner_text">Please tap on a square</string>
-    <string name="info_computer_goes_next">Computer will wait for its next available turn.</string>
-    <string name="info_defaultValue_lastTurnResults">Initial Turn:</string>
-    <string name="info_first_game_of_session">This is the first game of the session.</string>
 
     <!-- ActionBar Items -->
-    <string name="action_autoSaveGame">Auto-Save Game</string>
-    <string name="action_computerOpponent">Computer Opponent</string>
-    <string name="action_computerStarts">Computer Goes First</string>
     <string name="about">About</string>
 
     <!-- About Dialog Items -->>
@@ -49,12 +43,8 @@
     <string name="reset_statistics">Reset Statistics</string>
 
     <!-- Preference Key -->
-    <string name="key_use_auto_save">USE_AUTO_SAVE</string>
-    <string name="title_use_auto_save">Use Auto-Save</string>
-    <string name="key_computer_opponent">COMPUTER_OPPONENT</string>
-    <string name="title_computer_opponent">Computer Opponent</string>
-    <string name="key_computer_starts">COMPUTER_STARTS</string>
-    <string name="title_computer_starts">Computer Starts</string>
+    <string name="key_one_green_tile">ONE_GREEN_TILE</string>
+    <string name="title_one_green_tile">One_Green_Tile</string>
     <string name="score_format">Score: %d</string>
     <string name="timer_format">Time: %d</string>
     <string name="game_over">Game Over</string>
