@@ -9,18 +9,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mintedtech.dont_tap_red.R;
 import com.mintedtech.dont_tap_red.models.DontTapRed;
 
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    private TextView tvDataGamesPlayed,
-            tvDataWins, tvDataWinsPercent,
-            tvDataLosses, tvDataLossesPercent;
-
+    private TextView tvDataGamesPlayed, tvDataHighestScore, tvDataLowestScore;
     private DontTapRed mCurrentGame;
 
     @Override
@@ -48,10 +43,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void setupViews() {
         tvDataGamesPlayed = findViewById(R.id.tv_data_games_played);
-        tvDataWins = findViewById(R.id.tv_data_won_count);
-        tvDataWinsPercent = findViewById(R.id.tv_data_won_percent);
-        tvDataLosses = findViewById(R.id.tv_data_lost_count);
-        tvDataLossesPercent = findViewById(R.id.tv_data_lost_percent);
+        tvDataHighestScore = findViewById(R.id.tv_data_highest_score);
+        tvDataLowestScore = findViewById(R.id.tv_data_lowest_score);
     }
 
     private void getIncomingData() {
@@ -61,21 +54,9 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void processAndOutputIncomingData() {
-        final String FORMAT_STRING = "%2.1f%%", N_A = "N/A";
-        int numberOfGamesPlayed = mCurrentGame.getGamesPlayed();
-        int wins = mCurrentGame.getWins();
-        int losses = mCurrentGame.getLosses();
-        
-        String winPct = numberOfGamesPlayed == 0 ? N_A :
-                String.format(Locale.US, FORMAT_STRING, (wins / (double) numberOfGamesPlayed) * 100);
-        String lossPct = numberOfGamesPlayed == 0 ? N_A :
-                String.format(Locale.US, FORMAT_STRING, (losses / (double) numberOfGamesPlayed) * 100);
-        
-        tvDataGamesPlayed.setText(String.valueOf(numberOfGamesPlayed));
-        tvDataWins.setText(String.valueOf(wins));
-        tvDataLosses.setText(String.valueOf(losses));
-        tvDataWinsPercent.setText(winPct);
-        tvDataLossesPercent.setText(lossPct);
+        tvDataGamesPlayed.setText(String.valueOf(mCurrentGame.getGamesPlayed()));
+        tvDataHighestScore.setText(String.valueOf(mCurrentGame.getHighestScore()));
+        tvDataLowestScore.setText(String.valueOf(mCurrentGame.getLowestScore()));
     }
 
     @Override

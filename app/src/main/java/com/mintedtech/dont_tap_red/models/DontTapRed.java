@@ -15,8 +15,8 @@ public class DontTapRed {
     
     // Statistics
     private int mGamesPlayed;
-    private int mWins;
-    private int mLosses;
+    private int mHighestScore;
+    private int mLowestScore;
 
     public DontTapRed(int rows, int columns) {
         mRows = rows;
@@ -24,8 +24,8 @@ public class DontTapRed {
         mTilePositions = new ArrayList<>();
         mRandom = new Random();
         mGamesPlayed = 0;
-        mWins = 0;
-        mLosses = 0;
+        mHighestScore = 0;
+        mLowestScore = Integer.MAX_VALUE;
         startGame();
     }
 
@@ -41,10 +41,11 @@ public class DontTapRed {
     public void endGame() {
         mGameOver = true;
         mGamesPlayed++;
-        if (mScore >= 10) {
-            mWins++;
-        } else {
-            mLosses++;
+        if (mScore > mHighestScore) {
+            mHighestScore = mScore;
+        }
+        if (mScore < mLowestScore) {
+            mLowestScore = mScore;
         }
     }
 
@@ -93,18 +94,18 @@ public class DontTapRed {
         return mGamesPlayed;
     }
     
-    public int getWins() {
-        return mWins;
+    public int getHighestScore() {
+        return mHighestScore;
     }
     
-    public int getLosses() {
-        return mLosses;
+    public int getLowestScore() {
+        return mLowestScore == Integer.MAX_VALUE ? 0 : mLowestScore;
     }
     
     public void resetStatistics() {
         mGamesPlayed = 0;
-        mWins = 0;
-        mLosses = 0;
+        mHighestScore = 0;
+        mLowestScore = Integer.MAX_VALUE;
     }
 
     public static String getJSONFromGame(DontTapRed game) {
