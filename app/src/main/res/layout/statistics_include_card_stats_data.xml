@@ -28,85 +28,83 @@
         tools:text="18" />
 
     <TextView
-        android:id="@+id/tv_label_header_player"
+        android:id="@+id/tv_label_header_outcome"
         style="@style/TextViewStatistics.SecondaryTextColor.Bold"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:text="@string/player_letter"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_label_header_wins"
-        app:layout_constraintEnd_toStartOf="@+id/tv_label_header_wins"
+        android:text="Outcome"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_label_header_count"
+        app:layout_constraintEnd_toStartOf="@+id/tv_label_header_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_label_header_wins" />
+        app:layout_constraintTop_toTopOf="@+id/tv_label_header_count" />
 
     <TextView
-        android:id="@+id/tv_label_header_wins"
+        android:id="@+id/tv_label_header_count"
         style="@style/TextViewStatistics.SecondaryTextColor.Bold"
         android:layout_marginTop="@dimen/double_margin"
         android:ellipsize="start"
         android:maxLines="2"
-        android:text="@string/games_won"
+        android:text="Count"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_label_games_played" />
 
     <TextView
-        android:id="@+id/tv_label_header_win_pct"
+        android:id="@+id/tv_label_header_percent"
         style="@style/TextViewStatistics.SecondaryTextColor.Bold"
         android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginLeft="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:text="@string/percent_won"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_label_header_wins"
+        android:text="Percent"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_label_header_count"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_label_header_wins"
-        app:layout_constraintTop_toTopOf="@+id/tv_label_header_wins" />
+        app:layout_constraintStart_toEndOf="@+id/tv_label_header_count"
+        app:layout_constraintTop_toTopOf="@+id/tv_label_header_count" />
 
     <TextView
-        android:id="@+id/tv_label_player1_number"
+        android:id="@+id/tv_label_won"
         style="@style/TextViewStatistics.SecondaryTextColor"
-        android:text="@string/x"
-        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_player"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_header_player"
-        app:layout_constraintTop_toTopOf="@+id/tv_data_player1_wins" />
+        android:text="Won"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_outcome"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_header_outcome"
+        app:layout_constraintTop_toTopOf="@+id/tv_data_won_count" />
 
     <TextView
-        android:id="@+id/tv_data_player1_wins"
+        android:id="@+id/tv_data_won_count"
         style="@style/TextViewStatistics.SecondaryTextColor"
         android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_wins"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_header_wins"
-        app:layout_constraintTop_toBottomOf="@+id/tv_label_header_wins"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_count"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_header_count"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_header_count"
         tools:text="6" />
 
     <TextView
-        android:id="@+id/tv_data_player1_win_percent"
+        android:id="@+id/tv_data_won_percent"
         style="@style/TextViewStatistics.SecondaryTextColor"
-        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_win_pct"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_header_win_pct"
-        app:layout_constraintTop_toTopOf="@+id/tv_data_player1_wins"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_percent"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_header_percent"
+        app:layout_constraintTop_toTopOf="@+id/tv_data_won_count"
         tools:text="33%" />
 
     <TextView
-        android:id="@+id/tv_label_player2_number"
+        android:id="@+id/tv_label_lost"
         style="@style/TextViewStatistics.SecondaryTextColor"
-        android:text="@string/o"
-        app:layout_constraintEnd_toEndOf="@+id/tv_label_player1_number"
-        app:layout_constraintTop_toTopOf="@+id/tv_data_player2_wins" />
+        android:text="Lost"
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_won"
+        app:layout_constraintTop_toTopOf="@+id/tv_data_lost_count" />
 
     <TextView
-        android:id="@+id/tv_data_player2_wins"
+        android:id="@+id/tv_data_lost_count"
         style="@style/TextViewStatistics.SecondaryTextColor"
         android:layout_marginTop="@dimen/default_margin"
-        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_wins"
-        app:layout_constraintStart_toStartOf="@+id/tv_label_header_wins"
-        app:layout_constraintTop_toBottomOf="@+id/tv_data_player1_wins"
-        tools:text="9" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_label_header_count"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_header_count"
+        app:layout_constraintTop_toBottomOf="@+id/tv_data_won_count"
+        tools:text="12" />
 
     <TextView
-        android:id="@+id/tv_data_player2_win_percent"
+        android:id="@+id/tv_data_lost_percent"
         style="@style/TextViewStatistics.SecondaryTextColor"
-        app:layout_constraintStart_toStartOf="@+id/tv_data_player1_win_percent"
-        app:layout_constraintTop_toTopOf="@+id/tv_data_player2_wins"
-        tools:text="50%" />
+        app:layout_constraintStart_toStartOf="@+id/tv_data_won_percent"
+        app:layout_constraintTop_toTopOf="@+id/tv_data_lost_count"
+        tools:text="67%" />
 </androidx.constraintlayout.widget.ConstraintLayout>

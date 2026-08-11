@@ -1,5 +1,7 @@
 package com.mintedtech.dont_tap_red.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mintedtech.dont_tap_red.R;
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final String GAME_KEY = "GAME";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +69,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGame() {
-        mGame = new DontTapRed(3, 3);
+        if (mGame == null) {
+            String gameJSON = PreferenceManager.getDefaultSharedPreferences(this).getString(GAME_KEY, null);
+            if (gameJSON != null) {
+                mGame = DontTapRed.getGameFromJSON(gameJSON);
+                mGame.startGame(); // Reset current game score but keep stats
+            } else {
+                mGame = new DontTapRed(3, 3);
+            }
+        } else {
+            mGame.startGame();
+        }
+
         mAdapter = new CardViewImageAdapter(mGame);
         mGameStarted = false;
-        
+
         mRecyclerView.setAdapter(mAdapter);
         adjustSpeed();
         mAdapter.setOnItemClickListener((position, v) -> {
@@ -135,13 +151,24 @@ public class MainActivity extends AppCompatActivity {
     private void handleGameOver() {
         mHandler.removeCallbacks(mGameLoop);
         mHandler.removeCallbacks(mUpdateTimerRunnable);
+        mGame.endGame();
+        saveGame();
         new AlertDialog.Builder(this)
                 .setTitle(R.string.game_over)
                 .setMessage(getString(R.string.score_format, mGame.getScore()))
+                .setPositiveButton(R.string.play_again, (dialog, which) -> setupGame())
+                .setNegativeButton(R.string.exit, (dialog, which) -> finish())
+                .setCancelable(false)
                 .show();
-        setupGame();
     }
-    
+
+    private void saveGame() {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit()
+                .putString(GAME_KEY, DontTapRed.getJSONFromGame(mGame))
+                .apply();
+    }
+
     private void showRulesDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.aboutDialogTitle)
@@ -155,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mHandler.removeCallbacks(mGameLoop);
         mHandler.removeCallbacks(mUpdateTimerRunnable);
+        saveGame();
     }
 
     @Override
@@ -180,6 +208,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_statistics) {
+            showStatistics();
+            return true;
+        } else if (id == R.id.action_reset_stats) {
+            mGame.resetStatistics();
+            saveGame();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showStatistics() {
+        Intent intent = new Intent(this, StatisticsActivity.class);
+        intent.putExtra("GAME", DontTapRed.getJSONFromGame(mGame));
+        startActivity(intent);
     }
 }
