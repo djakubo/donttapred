@@ -7,8 +7,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mintedtech.dont_tap_red.R;
-import com.mintedtech.dont_tap_red.enums.PlayerTurn;
-import com.mintedtech.dont_tap_red.models.TicTacToe;
+import com.mintedtech.dont_tap_red.models.DontTapRed;
 
 import java.util.Locale;
 
@@ -19,10 +18,10 @@ import androidx.appcompat.widget.Toolbar;
 public class StatisticsActivity extends AppCompatActivity {
 
     private TextView tvDataGamesPlayed,
-            tvDataPlayer1Wins, tvDataPlayer1WinsPercent,
-            tvDataPlayer2Wins, tvDataPlayer2WinsPercent;
+            tvDataWins, tvDataWinsPercent,
+            tvDataLosses, tvDataLossesPercent;
 
-    private TicTacToe mCurrentGame;
+    private DontTapRed mCurrentGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() !=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -49,32 +48,34 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void setupViews() {
         tvDataGamesPlayed = findViewById(R.id.tv_data_games_played);
-        tvDataPlayer1Wins = findViewById(R.id.tv_data_player1_wins);
-        tvDataPlayer1WinsPercent = findViewById(R.id.tv_data_player1_win_percent);
-        tvDataPlayer2Wins = findViewById(R.id.tv_data_player2_wins);
-        tvDataPlayer2WinsPercent = findViewById(R.id.tv_data_player2_win_percent);
+        tvDataWins = findViewById(R.id.tv_data_won_count);
+        tvDataWinsPercent = findViewById(R.id.tv_data_won_percent);
+        tvDataLosses = findViewById(R.id.tv_data_lost_count);
+        tvDataLossesPercent = findViewById(R.id.tv_data_lost_percent);
     }
 
     private void getIncomingData() {
         Intent intent = getIntent();
         String gameJSON = intent.getStringExtra("GAME");
-        mCurrentGame = TicTacToe.getGameFromJSON(gameJSON);
+        mCurrentGame = DontTapRed.getGameFromJSON(gameJSON);
     }
 
     private void processAndOutputIncomingData() {
         final String FORMAT_STRING = "%2.1f%%", N_A = "N/A";
-        int numberOfGamesPlayed = mCurrentGame.getNumberOfGamesPlayed();
-        int p1Wins = mCurrentGame.getNumberOfWinsForPlayer(PlayerTurn.X);
-        int p2Wins = mCurrentGame.getNumberOfWinsForPlayer(PlayerTurn.O);
-        String p1WinPct = numberOfGamesPlayed  == 0 ? N_A :
-                String.format(Locale.US, FORMAT_STRING, (p1Wins/(double)numberOfGamesPlayed)*100);
-        String p2WinPct = numberOfGamesPlayed == 0 ? N_A :
-                String.format(Locale.US, FORMAT_STRING, (p2Wins/(double)numberOfGamesPlayed)*100);
-        tvDataGamesPlayed.setText(String.valueOf(numberOfGamesPlayed));     // don't forget String.valueOf()
-        tvDataPlayer1Wins.setText(String.valueOf(p1Wins));
-        tvDataPlayer2Wins.setText(String.valueOf(p2Wins));
-        tvDataPlayer1WinsPercent.setText(p1WinPct);
-        tvDataPlayer2WinsPercent.setText(p2WinPct);
+        int numberOfGamesPlayed = mCurrentGame.getGamesPlayed();
+        int wins = mCurrentGame.getWins();
+        int losses = mCurrentGame.getLosses();
+        
+        String winPct = numberOfGamesPlayed == 0 ? N_A :
+                String.format(Locale.US, FORMAT_STRING, (wins / (double) numberOfGamesPlayed) * 100);
+        String lossPct = numberOfGamesPlayed == 0 ? N_A :
+                String.format(Locale.US, FORMAT_STRING, (losses / (double) numberOfGamesPlayed) * 100);
+        
+        tvDataGamesPlayed.setText(String.valueOf(numberOfGamesPlayed));
+        tvDataWins.setText(String.valueOf(wins));
+        tvDataLosses.setText(String.valueOf(losses));
+        tvDataWinsPercent.setText(winPct);
+        tvDataLossesPercent.setText(lossPct);
     }
 
     @Override

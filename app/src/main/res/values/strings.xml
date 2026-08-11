@@ -43,6 +43,7 @@
     <string name="games_played"><![CDATA[Games played: ]]></string>
     <string name="player_letter">Player\nLetter</string>
     <string name="games_won">Games\nWon</string>
+    <string name="games_lost">Games\nLost</string>
     <string name="percent_won">Percent\nWon</string>
     <string name="view_statistics">View Statistics</string>
     <string name="reset_statistics">Reset Statistics</string>

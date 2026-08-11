@@ -1,5 +1,6 @@
 package com.mintedtech.dont_tap_red.models;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,12 +12,20 @@ public class DontTapRed {
     private int mScore;
     private boolean mGameOver;
     private final Random mRandom;
+    
+    // Statistics
+    private int mGamesPlayed;
+    private int mWins;
+    private int mLosses;
 
     public DontTapRed(int rows, int columns) {
         mRows = rows;
         mColumns = columns;
         mTilePositions = new ArrayList<>();
         mRandom = new Random();
+        mGamesPlayed = 0;
+        mWins = 0;
+        mLosses = 0;
         startGame();
     }
 
@@ -28,11 +37,21 @@ public class DontTapRed {
             mTilePositions.add(mRandom.nextInt(mColumns));
         }
     }
+    
+    public void endGame() {
+        mGameOver = true;
+        mGamesPlayed++;
+        if (mScore >= 10) {
+            mWins++;
+        } else {
+            mLosses++;
+        }
+    }
 
     public boolean shiftTiles() {
         if (mGameOver) return false;
         
-        // Move all black tiles down one row
+        // Move all tiles down one row
         for (int i = mRows - 1; i > 0; i--) {
             mTilePositions.set(i, mTilePositions.get(i - 1));
         }
@@ -68,5 +87,31 @@ public class DontTapRed {
 
     public int getRows() {
         return mRows;
+    }
+    
+    public int getGamesPlayed() {
+        return mGamesPlayed;
+    }
+    
+    public int getWins() {
+        return mWins;
+    }
+    
+    public int getLosses() {
+        return mLosses;
+    }
+    
+    public void resetStatistics() {
+        mGamesPlayed = 0;
+        mWins = 0;
+        mLosses = 0;
+    }
+
+    public static String getJSONFromGame(DontTapRed game) {
+        return new Gson().toJson(game);
+    }
+
+    public static DontTapRed getGameFromJSON(String json) {
+        return new Gson().fromJson(json, DontTapRed.class);
     }
 }
