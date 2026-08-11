@@ -21,6 +21,9 @@ public class DontTapRed {
         mOneGreenTile = oneGreenTile;
         mTilePositions = new ArrayList<>();
         mRandom = new Random();
+        mGamesPlayed = 0;
+        mHighestScore = 0;
+        mLowestScore = Integer.MAX_VALUE;
         startGame();
     }
 
@@ -42,6 +45,17 @@ public class DontTapRed {
                 // Normal mode: every row has a green tile
                 mTilePositions.add(mRandom.nextInt(mColumns));
             }
+        }
+    }
+    
+    public void endGame() {
+        mGameOver = true;
+        mGamesPlayed++;
+        if (mScore > mHighestScore) {
+            mHighestScore = mScore;
+        }
+        if (mScore < mLowestScore) {
+            mLowestScore = mScore;
         }
     }
 
