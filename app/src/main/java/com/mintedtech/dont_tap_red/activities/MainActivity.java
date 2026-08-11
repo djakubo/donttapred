@@ -1,5 +1,7 @@
 package com.mintedtech.dont_tap_red.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mintedtech.dont_tap_red.R;
@@ -64,7 +67,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGame() {
-        mGame = new DontTapRed(3, 3);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean oneGreenTile = prefs.getBoolean(getString(R.string.key_one_green_tile), false);
+        
+        mGame = new DontTapRed(3, 3, oneGreenTile);
         mAdapter = new CardViewImageAdapter(mGame);
         mGameStarted = false;
         
@@ -175,11 +181,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Set the state of the "One Green Tile" menu item from preferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean oneGreenTile = prefs.getBoolean(getString(R.string.key_one_green_tile), false);
+        MenuItem oneGreenTileItem = menu.findItem(R.id.action_one_green_tile);
+        if (oneGreenTileItem != null) {
+            oneGreenTileItem.setChecked(oneGreenTile);
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_one_green_tile) {
+            // Toggle the preference
+            boolean newValue = !item.isChecked();
+            item.setChecked(newValue);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit().putBoolean(getString(R.string.key_one_green_tile), newValue).apply();
+
+            // Reset the game to apply the new setting
+            setupGame();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
