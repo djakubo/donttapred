@@ -18,10 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mintedtech.dont_tap_red.R;
 import com.mintedtech.dont_tap_red.classes.CardViewImageAdapter;
+import com.mintedtech.dont_tap_red.classes.Utils;
 import com.mintedtech.dont_tap_red.models.DontTapRed;
 import com.mintedtech.dont_tap_red.interfaces.OnItemClickCustomListener;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String KEY_GAME_JSON = "game_json";
+    private static final String KEY_GAME_STARTED = "game_started";
+    private static final String KEY_CURRENT_STAY = "current_stay";
+    private static final String KEY_TURN_START_TIME = "turn_start_time";
 
     private DontTapRed mGame;
     private CardViewImageAdapter mAdapter;
@@ -61,7 +67,26 @@ public class MainActivity extends AppCompatActivity {
         mTimerView = findViewById(R.id.tv_timer);
         mRecyclerView = findViewById(R.id.rv_board);
 
-        setupGame();
+        if (savedInstanceState != null) {
+            String gameJson = savedInstanceState.getString(KEY_GAME_JSON);
+            mGame = DontTapRed.getGameFromJSON(gameJson);
+            mGameStarted = savedInstanceState.getBoolean(KEY_GAME_STARTED);
+            mCurrentStay = savedInstanceState.getLong(KEY_CURRENT_STAY);
+            mTurnStartTime = savedInstanceState.getLong(KEY_TURN_START_TIME);
+            
+            mAdapter = new CardViewImageAdapter(mGame);
+            mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener((position, v) -> handleItemClick(position));
+            
+            updateUI();
+            if (mTimerView != null) {
+                long remaining = mCurrentStay - (System.currentTimeMillis() - mTurnStartTime);
+                if (remaining < 0) remaining = 0;
+                mTimerView.setText(getString(R.string.timer_format, (int) Math.ceil(remaining / 1000.0)));
+            }
+        } else {
+            setupGame();
+        }
 
         findViewById(R.id.fab).setOnClickListener(view -> showRulesDialog());
     }
@@ -76,19 +101,21 @@ public class MainActivity extends AppCompatActivity {
         
         mRecyclerView.setAdapter(mAdapter);
         adjustSpeed();
-        mAdapter.setOnItemClickListener((position, v) -> {
-            if (mGame.isGameOver()) return;
-
-            if (mGame.getTileType(position) == 1) {
-                handleGreenClick();
-            } else {
-                handleRedClick();
-            }
-        });
+        mAdapter.setOnItemClickListener((position, v) -> handleItemClick(position));
 
         mScoreView.setText(getString(R.string.score_format, mGame.getScore()));
         if (mTimerView != null) {
             mTimerView.setText(getString(R.string.timer_format, (int) (mCurrentStay / 1000)));
+        }
+    }
+
+    private void handleItemClick(int position) {
+        if (mGame.isGameOver()) return;
+
+        if (mGame.getTileType(position) == 1) {
+            handleGreenClick();
+        } else {
+            handleRedClick();
         }
     }
 
@@ -149,11 +176,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void showRulesDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.aboutDialogTitle)
-                .setMessage(R.string.game_rules)
-                .setPositiveButton(android.R.string.ok, null)
-                .show();
+        Utils.showInfoDialog(this, R.string.aboutDialogTitle, R.string.game_rules);
     }
 
     @Override
@@ -208,8 +231,22 @@ public class MainActivity extends AppCompatActivity {
             // Reset the game to apply the new setting
             setupGame();
             return true;
+        } else if (id == R.id.action_about) {
+            showRulesDialog();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mGame != null) {
+            outState.putString(KEY_GAME_JSON, mGame.getJSONFromCurrentGame());
+            outState.putBoolean(KEY_GAME_STARTED, mGameStarted);
+            outState.putLong(KEY_CURRENT_STAY, mCurrentStay);
+            outState.putLong(KEY_TURN_START_TIME, mTurnStartTime);
+        }
     }
 }

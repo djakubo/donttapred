@@ -1,29 +1,29 @@
-# Walkthrough - Cleaned Legacy Preferences
+# Walkthrough - Saved Game State on Rotation
 
-I have swapped out the legacy TicTacToe preferences for a "Don't Tap Red" specific setting and cleaned up the resource files, while preserving the statistics logic as requested.
+I have implemented game state preservation to ensure that when you rotate your device between portrait and landscape modes, your score, tile positions, and timer progress are not lost.
 
 ## Changes Made
 
-### UI & Resource Cleanup
-- **Updated `menu_main.xml`**:
-    - Removed TicTacToe-specific settings (Auto-Save, Computer Opponent, Computer Starts).
-    - Added a "One Green Tile" checkable menu item to allow toggling the game mode directly from the overflow menu.
-    - Preserved Statistics and About menu items.
-- **Cleaned `strings.xml`**:
-    - Removed unused legacy strings related to the computer opponent and turn info.
-    - Retained all strings required for the Statistics screen and the current game.
+### Model Serialization
+- **Updated `DontTapRed.java`**:
+    - Added `getJSONFromCurrentGame()` and `getGameFromJSON()` methods using the `Gson` library.
+    - Marked the `Random` instance as `transient` so it doesn't cause issues during serialization, and ensured it is re-initialized upon restoration.
 
-### Logic Integration
+### Activity Lifecycle Management
 - **Updated `MainActivity.java`**:
-    - Implemented `onCreateOptionsMenu` to initialize the "One Green Tile" menu item state from the saved preferences.
-    - Updated `onOptionsItemSelected` to handle the "One Green Tile" toggle, saving the new preference and restarting the game to apply the change immediately.
-    - **Statistics Logic Preserved**: Ensured no changes were made to the existing statistics infrastructure.
+    - **State Saving**: Overrode `onSaveInstanceState` to store the game state JSON and timing information (current stay duration and turn start time).
+    - **State Restoration**: Modified `onCreate` to check for a saved state. If present, it restores the existing `DontTapRed` instance and resumes the timer from where it left off.
+    - **UI Consistency**: Ensured the RecyclerView and adapter are correctly re-linked to the restored game model.
+
+### Resource Stability
+- **Restored Strings**: Fixed an issue where some layout-required strings (like `board_space` and `x`/`o`) were accidentally removed, ensuring the app builds and links correctly.
 
 ## Verification Results
 
 ### Build Success
 - Ran `:app:assembleDebug` and the build finished successfully.
 
-### Manual Verification Path
-- **Menu Check**: Open the overflow menu; verify "Auto-Save" etc. are gone and "One Green Tile" is present.
-- **Toggle Test**: Tap "One Green Tile"; verify the checkmark toggles and the game board resets with the new mode applied.
+### Rotation Test (Verified by Logic)
+- The implementation now explicitly saves the `DontTapRed` model's state.
+- Upon rotation, the `MainActivity` skips new game creation and instead uses the serialized data to recreate the exact same game board and score.
+- The timer logic now accounts for the elapsed time before rotation, ensuring a seamless transition.
