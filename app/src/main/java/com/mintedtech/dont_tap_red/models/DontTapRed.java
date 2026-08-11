@@ -1,5 +1,7 @@
 package com.mintedtech.dont_tap_red.models;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,7 +12,7 @@ public class DontTapRed {
     private final List<Integer> mTilePositions;
     private int mScore;
     private boolean mGameOver;
-    private final Random mRandom;
+    private transient Random mRandom;
     private final boolean mOneGreenTile;
 
     public DontTapRed(int rows, int columns, boolean oneGreenTile) {
@@ -99,5 +101,31 @@ public class DontTapRed {
 
     public int getRows() {
         return mRows;
+    }
+
+    /**
+     * Reverses the game object's serialization as a String
+     * back to a DontTapRed game object
+     *
+     * @param json The serialized String of the game object
+     * @return The game object
+     */
+    public static DontTapRed getGameFromJSON(String json) {
+        Gson gson = new Gson();
+        DontTapRed game = gson.fromJson(json, DontTapRed.class);
+        if (game != null && game.mRandom == null) {
+            game.mRandom = new Random();
+        }
+        return game;
+    }
+
+    /**
+     * Serializes the game object to a JSON-formatted String
+     *
+     * @return JSON-formatted String
+     */
+    public String getJSONFromCurrentGame() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

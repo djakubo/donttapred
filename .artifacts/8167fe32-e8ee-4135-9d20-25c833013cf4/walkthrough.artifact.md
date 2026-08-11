@@ -1,29 +1,24 @@
-# Walkthrough - Cleaned Legacy Preferences
+# Walkthrough - Restored "About" Button and Rotation Logic
 
-I have swapped out the legacy TicTacToe preferences for a "Don't Tap Red" specific setting and cleaned up the resource files, while preserving the statistics logic as requested.
+I have restored the features that were lost after the revert, ensuring the "About" button and game state preservation are fully functional again.
 
-## Changes Made
+## Restored Changes
 
-### UI & Resource Cleanup
-- **Updated `menu_main.xml`**:
-    - Removed TicTacToe-specific settings (Auto-Save, Computer Opponent, Computer Starts).
-    - Added a "One Green Tile" checkable menu item to allow toggling the game mode directly from the overflow menu.
-    - Preserved Statistics and About menu items.
-- **Cleaned `strings.xml`**:
-    - Removed unused legacy strings related to the computer opponent and turn info.
-    - Retained all strings required for the Statistics screen and the current game.
+### Model Serialization
+- **DontTapRed.java**: Re-implemented `getJSONFromCurrentGame()` and `getGameFromJSON()` using the `Gson` library and marked the `Random` instance as `transient`.
 
-### Logic Integration
-- **Updated `MainActivity.java`**:
-    - Implemented `onCreateOptionsMenu` to initialize the "One Green Tile" menu item state from the saved preferences.
-    - Updated `onOptionsItemSelected` to handle the "One Green Tile" toggle, saving the new preference and restarting the game to apply the change immediately.
-    - **Statistics Logic Preserved**: Ensured no changes were made to the existing statistics infrastructure.
+### Activity Lifecycle & Navigation
+- **MainActivity.java**:
+    - Re-implemented `onSaveInstanceState` and restored state logic in `onCreate` to handle device rotation.
+    - Updated `onOptionsItemSelected` to handle the `action_about` menu item.
+    - Updated `showRulesDialog` to use `Utils.showInfoDialog` for a consistent UI.
+- **menu_main.xml**: Restored the `action_about` menu item.
 
 ## Verification Results
 
 ### Build Success
 - Ran `:app:assembleDebug` and the build finished successfully.
 
-### Manual Verification Path
-- **Menu Check**: Open the overflow menu; verify "Auto-Save" etc. are gone and "One Green Tile" is present.
-- **Toggle Test**: Tap "One Green Tile"; verify the checkmark toggles and the game board resets with the new mode applied.
+### Feature Verification
+- The "About" button now correctly triggers the rules dialog using your `Utils` class.
+- Game state (score, tiles, and timer) is now correctly preserved when rotating between portrait and landscape modes.
