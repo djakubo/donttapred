@@ -15,6 +15,11 @@ public class DontTapRed {
     private transient Random mRandom;
     private final boolean mOneGreenTile;
 
+    // Statistics fields
+    private int mGamesPlayed;
+    private int mHighestScore;
+    private int mLowestScore = -1; // -1 indicates no games played yet
+
     public DontTapRed(int rows, int columns, boolean oneGreenTile) {
         mRows = rows;
         mColumns = columns;
@@ -87,6 +92,18 @@ public class DontTapRed {
     public void addScore(){
         mScore++;
     }
+
+    public void endGame() {
+        mGameOver = true;
+        mGamesPlayed++;
+        if (mScore > mHighestScore) {
+            mHighestScore = mScore;
+        }
+        if (mLowestScore == -1 || mScore < mLowestScore) {
+            mLowestScore = mScore;
+        }
+    }
+
     public int getScore() {
         return mScore;
     }
@@ -101,6 +118,24 @@ public class DontTapRed {
 
     public int getRows() {
         return mRows;
+    }
+
+    public int getGamesPlayed() {
+        return mGamesPlayed;
+    }
+
+    public int getHighestScore() {
+        return mHighestScore;
+    }
+
+    public int getLowestScore() {
+        return mLowestScore == -1 ? 0 : mLowestScore;
+    }
+
+    public void resetStatistics() {
+        mGamesPlayed = 0;
+        mHighestScore = 0;
+        mLowestScore = -1;
     }
 
     /**

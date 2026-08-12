@@ -95,7 +95,18 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean oneGreenTile = prefs.getBoolean(getString(R.string.key_one_green_tile), false);
 
-        mGame = new DontTapRed(3, 3, oneGreenTile);
+        if (mGame == null) {
+            String gameJson = prefs.getString(KEY_GAME_JSON, null);
+            if (gameJson != null) {
+                mGame = DontTapRed.getGameFromJSON(gameJson);
+                mGame.startGame(); // Keep stats, reset current game state
+            } else {
+                mGame = new DontTapRed(3, 3, oneGreenTile);
+            }
+        } else {
+            mGame.startGame();
+        }
+
         mAdapter = new CardViewImageAdapter(mGame);
         mGameStarted = false;
 
@@ -168,11 +179,20 @@ public class MainActivity extends AppCompatActivity {
     private void handleGameOver() {
         mHandler.removeCallbacks(mGameLoop);
         mHandler.removeCallbacks(mUpdateTimerRunnable);
+        mGame.endGame();
+        saveGame();
         new AlertDialog.Builder(this)
                 .setTitle(R.string.game_over)
                 .setMessage(getString(R.string.score_format, mGame.getScore()))
                 .show();
         setupGame();
+    }
+
+    private void saveGame() {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit()
+                .putString(KEY_GAME_JSON, mGame.getJSONFromCurrentGame())
+                .apply();
     }
     
     private void showRulesDialog() {
@@ -231,12 +251,25 @@ public class MainActivity extends AppCompatActivity {
             // Reset the game to apply the new setting
             setupGame();
             return true;
+        } else if (id == R.id.action_statistics) {
+            showStatistics();
+            return true;
+        } else if (id == R.id.action_reset_stats) {
+            mGame.resetStatistics();
+            saveGame();
+            return true;
         } else if (id == R.id.action_about) {
             showRulesDialog();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showStatistics() {
+        Intent intent = new Intent(this, StatisticsActivity.class);
+        intent.putExtra("GAME", mGame.getJSONFromCurrentGame());
+        startActivity(intent);
     }
 
     @Override
