@@ -13,10 +13,40 @@
         app:fabAlignmentMode="end"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
-        tools:ignore="BottomAppBar"
-        tools:showIn="@layout/activity_main">
+        tools:ignore="BottomAppBar">
 
-        <include layout="@layout/main_include_bottom_bar_contents" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/outside_half_margin"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.Material3.ActionBar.Title"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Time: 10:00" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/outside_half_margin"
+                android:gravity="center"
+                android:text="@string/score_format"
+                android:textAppearance="@style/TextAppearance.Material3.ActionBar.Title"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
