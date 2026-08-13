@@ -13,7 +13,7 @@ public class DontTapRed {
     private int mScore;
     private boolean mGameOver;
     private transient Random mRandom;
-    private final boolean mOneGreenTile;
+    private boolean mOneGreenTile;
 
     // Statistics fields
     private int mGamesPlayed;
@@ -53,7 +53,7 @@ public class DontTapRed {
     public boolean shiftTiles() {
         if (mGameOver) return false;
 
-        // Move all black tiles down one row
+        // Move all tiles down one row
         for (int i = mRows - 1; i > 0; i--) {
             mTilePositions.set(i, mTilePositions.get(i - 1));
         }
@@ -130,6 +130,10 @@ public class DontTapRed {
 
     public int getLowestScore() {
         return mLowestScore == -1 ? 0 : mLowestScore;
+    }
+
+    public void setOneGreenTile(boolean oneGreenTile) {
+        mOneGreenTile = oneGreenTile;
     }
 
     public void resetStatistics() {

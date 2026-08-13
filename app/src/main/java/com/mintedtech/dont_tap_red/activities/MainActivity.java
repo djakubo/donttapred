@@ -74,11 +74,9 @@ public class MainActivity extends AppCompatActivity {
             mCurrentStay = savedInstanceState.getLong(KEY_CURRENT_STAY);
             mTurnStartTime = savedInstanceState.getLong(KEY_TURN_START_TIME);
 
-            mAdapter = new CardViewImageAdapter(mGame);
-            mRecyclerView.setAdapter(mAdapter);
-            mAdapter.setOnItemClickListener((position, v) -> handleItemClick(position));
-
+            setupRecyclerView();
             updateUI();
+            
             if (mTimerView != null) {
                 long remaining = mCurrentStay - (System.currentTimeMillis() - mTurnStartTime);
                 if (remaining < 0) remaining = 0;
@@ -91,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.fab).setOnClickListener(view -> showRulesDialog());
     }
 
+    private void setupRecyclerView() {
+        mAdapter = new CardViewImageAdapter(mGame);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener((position, v) -> handleItemClick(position));
+    }
+
     private void setupGame() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean oneGreenTile = prefs.getBoolean(getString(R.string.key_one_green_tile), false);
@@ -99,20 +103,19 @@ public class MainActivity extends AppCompatActivity {
             String gameJson = prefs.getString(KEY_GAME_JSON, null);
             if (gameJson != null) {
                 mGame = DontTapRed.getGameFromJSON(gameJson);
+                mGame.setOneGreenTile(oneGreenTile);
                 mGame.startGame(); // Keep stats, reset current game state
             } else {
                 mGame = new DontTapRed(3, 3, oneGreenTile);
             }
         } else {
+            mGame.setOneGreenTile(oneGreenTile);
             mGame.startGame();
         }
 
-        mAdapter = new CardViewImageAdapter(mGame);
+        setupRecyclerView();
         mGameStarted = false;
-
-        mRecyclerView.setAdapter(mAdapter);
         adjustSpeed();
-        mAdapter.setOnItemClickListener((position, v) -> handleItemClick(position));
 
         mScoreView.setText(getString(R.string.score_format, mGame.getScore()));
         if (mTimerView != null) {
@@ -156,23 +159,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void adjustSpeed() {
         switch (mGame.getScore()) {
-            case 0: //first three tries user gets ten seconds
+            case 0: // score 0-2 user gets ten seconds
             case 1:
             case 2:
                 mCurrentStay = 10000;
                 break;
-            case 3: //next three tries user gets five seconds
+            case 3: // score 3-5 user gets five seconds
             case 4:
             case 5:
                 mCurrentStay = 5000;
                 break;
-            case 6:
+            case 6: // score 6-8 user gets two seconds
             case 7:
-            case 8: //first three tries user gets ten seconds
+            case 8:
                 mCurrentStay = 2000;
                 break;
-            default://after nine tries user gets one second and on
-                mCurrentStay=1000; 
+            default: // score 9+ user gets one second
+                mCurrentStay = 1000;
         }
     }
 
@@ -181,10 +184,7 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(mUpdateTimerRunnable);
         mGame.endGame();
         saveGame();
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.game_over)
-                .setMessage(getString(R.string.score_format, mGame.getScore()))
-                .show();
+        Utils.showInfoDialog(this, getString(R.string.game_over), getString(R.string.score_format, mGame.getScore()));
         setupGame();
     }
 

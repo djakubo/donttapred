@@ -4,11 +4,6 @@
     <string name="fab">FAB</string>
     <string name="information">Information</string>
 
-    <!-- Board and winner Choices -->
-    <string name="x">X</string>
-    <string name="o">O</string>
-    <string name="no_winner">No Winner</string>
-
     <!-- Info Messages -->
     <string name="game_rules">"
         Don't Tap Red is simple to play!\n
@@ -23,21 +18,12 @@
     <!-- About Dialog Items -->>
     <string name="aboutDialogTitle">About Don\'t Tap Red </string>
     <string name="OK">OK</string>
-
-    <!-- Status Bar Items -->
-    <string name="status_bar_text">Current player: X</string>
-    <string name="current_turn">"Current Player: "</string>
-
-    <!-- Alternate Descriptions for ImageView images -->
-    <string name="current_turn_X">Current turn: X</string>
-    <string name="current_turn_O">Current turn: O</string>
     <string name="board_space">Board Space</string>
+    <string name="highest_score">Highest Score: </string>
+    <string name="lowest_score">Lowest Score: </string>
 
     <!-- Strings used for Statistics Activity -->
     <string name="games_played"><![CDATA[Games played: ]]></string>
-    <string name="player_letter">Player\nLetter</string>
-    <string name="games_won">Games\nWon</string>
-    <string name="percent_won">Percent\nWon</string>
     <string name="view_statistics">View Statistics</string>
     <string name="reset_statistics">Reset Statistics</string>
 
